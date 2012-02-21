@@ -45,8 +45,8 @@
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\Program Files (x86)\Khrona LLC\Awesomium SDK\1.6.4\include;$(IncludePath)</IncludePath>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\Program Files (x86)\Khrona LLC\Awesomium SDK\1.6.4\include;$(IncludePath)</IncludePath>
-    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\Program Files (x86)\Khrona LLC\Awesomium SDK\1.6.4\build\lib\release;$(LibraryPath)</LibraryPath>
-    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\Program Files (x86)\Khrona LLC\Awesomium SDK\1.6.4\build\lib\debug;$(LibraryPath)</LibraryPath>
+    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\Program Files (x86)\Khrona LLC\Awesomium SDK\1.6.4\build\lib\release;C:\Program Files (x86)\Khrona LLC\Awesomium SDK\1.6.4\build\bin\release;$(LibraryPath)</LibraryPath>
+    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\Program Files (x86)\Khrona LLC\Awesomium SDK\1.6.4\build\lib\debug;C:\Program Files (x86)\Khrona LLC\Awesomium SDK\1.6.4\build\bin\debug;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
