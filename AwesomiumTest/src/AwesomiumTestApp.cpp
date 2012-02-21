@@ -1,5 +1,6 @@
 #include "cinder/app/AppBasic.h"
 #include "cinder/gl/gl.h"
+#include "cinder/Rand.h"
 
 #include <Awesomium/awesomium_capi.h>
 
@@ -22,6 +23,8 @@ class AwesomiumTestAppApp : public AppBasic {
 	void initAwesomium();
 	void loadWebPage( const string & url );
 
+	int mPageNum;
+
 	const unsigned char* rawBuffer;
 	const awe_renderbuffer *renderBuffer;
 	awe_webview* webView;
@@ -32,11 +35,24 @@ void AwesomiumTestAppApp::setup()
 	initAwesomium();
 	loadWebPage( "http://www.google.com" );
 
+	mPageNum = 0;
+
 }
 
 void AwesomiumTestAppApp::mouseDown( MouseEvent event )
 {
-	loadWebPage( "http://www.yahoo.com" );
+	console() << "loading page number: " << mPageNum << std::endl;
+
+	switch ( mPageNum ){
+		case 0: loadWebPage("http://www.yahoo.com");					break;
+		case 1: loadWebPage("http://www.google.com");					break;
+		case 2: loadWebPage("http://www.msn.com");						break;
+		case 3: loadWebPage("http://www.libcinder.org");				break;
+		case 4: loadWebPage("http://forum.libcinder.org"); mPageNum = 0; break;
+	}
+
+	mPageNum++;
+
 }
 
 void AwesomiumTestAppApp::update()
@@ -51,11 +67,17 @@ void AwesomiumTestAppApp::draw()
 	if(renderBuffer)
 	{
 		// Draw pixels directly to screen from our image buffer
+		
 		glDrawPixels(1024, 
 					 768, 
 					 GL_BGRA, 
 					 GL_UNSIGNED_BYTE, 
 					 awe_renderbuffer_get_buffer(renderBuffer) );   
+
+		// awe_renderbuffer_get_buffer(renderBuffer);
+
+		// glDrawPixels(getWindowWidth(), getWindowHeight(), GL_RGB, GL_UNSIGNED_BYTE, awe_renderbuffer_get_buffer(renderBuffer) );  
+		
 	}
 }
 
@@ -93,9 +115,7 @@ void AwesomiumTestAppApp::initAwesomium()
 
 
 	// Create a new WebView to load our page
-	webView = awe_webcore_create_webview(1024,
-		768,
-		false);
+	webView = awe_webcore_create_webview(1024, 768,	false);
 }
 
 
