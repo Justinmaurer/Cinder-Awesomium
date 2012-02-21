@@ -19,70 +19,24 @@ class AwesomiumTestAppApp : public AppBasic {
 	void mouseDown( MouseEvent event );	
 	void update();
 	void draw();
+	void initAwesomium();
+	void loadWebPage( const string & url );
+
+	const unsigned char* rawBuffer;
+	const awe_renderbuffer *renderBuffer;
+	awe_webview* webView;
 };
 
 void AwesomiumTestAppApp::setup()
 {
-	// Create our WebCore singleton with the default options
-	awe_webcore_initialize_default();
-
-	// Create a new WebView instance with a certain width and height, using the 
-	// WebCore we just created
-	awe_webview* webView = awe_webcore_create_webview(WIDTH, HEIGHT, false);
-
-	// Create our URL string
-	awe_string* url_str = awe_string_create_from_ascii(URL, strlen(URL));
-
-	// Load a certain URL into our WebView instance
-	awe_webview_load_url(webView, url_str, awe_string_empty(), 
-		awe_string_empty(), awe_string_empty());
-
-	// Destroy our URL string
-	awe_string_destroy(url_str);
-
-	console() <<  "Page is now loading..." << std::endl;;
-
-	// Wait for our WebView to finish loading
-	while(awe_webview_is_loading_page(webView))
-	{
-		Sleep(SLEEP_MS);
-		// We must call WebCore::update in our update loop.
-		awe_webcore_update();
-	}
-
-	console() << "Page has finished loading." << std::endl;
-
-	// Get our rendered buffer from our WebView. All actual rendering takes 
-	// place in our WebView sub-process which passes the rendered data to our 
-	// main process during each call to WebCore::update.
-	const awe_renderbuffer* renderBuffer = awe_webview_render(webView);
-
-	// Make sure our render buffer is not NULL-- WebView::render will return
-	// NULL if the WebView process has crashed.
-	if(renderBuffer != NULL)
-	{
-		// Create our filename string
-		awe_string* filename_str = awe_string_create_from_ascii("./result.jpg", 
-			strlen("./result.jpg"));
-
-		// Save our RenderBuffer directly to a JPEG image
-		awe_renderbuffer_save_to_jpeg(renderBuffer, filename_str, 90);
-
-		// Destroy our filename string
-		awe_string_destroy(filename_str);
-
-		std::cout << "Saved a render of the page to 'result.jpg'." << std::endl;
-
-				// Open up the saved JPEG
-		#if defined(__WIN32__) || defined(_WIN32)
-				system("start result.jpg");
-		#endif
-	}
+	initAwesomium();
+	loadWebPage( "http://www.google.com" );
 
 }
 
 void AwesomiumTestAppApp::mouseDown( MouseEvent event )
 {
+	loadWebPage( "http://www.yahoo.com" );
 }
 
 void AwesomiumTestAppApp::update()
@@ -93,6 +47,57 @@ void AwesomiumTestAppApp::draw()
 {
 	// clear out the window with black
 	gl::clear( Color( 0, 0, 0 ) ); 
+
+	if(renderBuffer)
+	{
+		// Draw pixels directly to screen from our image buffer
+		glDrawPixels(1024, 
+					 768, 
+					 GL_BGRA, 
+					 GL_UNSIGNED_BYTE, 
+					 awe_renderbuffer_get_buffer(renderBuffer) );   
+	}
 }
+
+void AwesomiumTestAppApp::loadWebPage( const string & url )
+{
+
+
+	// Create our URL string
+	awe_string* url_str = awe_string_create_from_ascii(url.c_str(),
+		strlen(url.c_str() ) );
+
+	// Load the URL into our WebView instance
+	awe_webview_load_url(webView,
+		url_str,
+		awe_string_empty(),
+		awe_string_empty(),
+		awe_string_empty());
+
+	// Destroy our URL string
+	awe_string_destroy(url_str);
+
+	// Wait for WebView to finish loading the page
+	while(awe_webview_is_loading_page(webView))
+		awe_webcore_update();
+
+	renderBuffer = awe_webview_render( webView );
+	
+}
+
+void AwesomiumTestAppApp::initAwesomium()
+{
+	// Create the WebCore with the default options
+	awe_webcore_initialize_default();
+
+
+
+	// Create a new WebView to load our page
+	webView = awe_webcore_create_webview(1024,
+		768,
+		false);
+}
+
+
 
 CINDER_APP_BASIC( AwesomiumTestAppApp, RendererGl )
