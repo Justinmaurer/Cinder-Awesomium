@@ -25,60 +25,52 @@ class AwesomiumTestAppApp : public AppBasic {
 	void draw();
 	void initAwesomium();
 	void loadWebPage( const string & url );
-
+	void updateWebPage();
 
 	bool mIsMouseDown;
 	int mPageNum;
 
-	const unsigned char* rawBuffer;
-	const awe_renderbuffer *renderBuffer;
-	awe_webview* webView;
+	const awe_renderbuffer *mRenderBuffer;
+	awe_webview* mWebView;
 
-	Rectf webPageRect;
+	Rectf mWebPageRect;
+	Vec2i mWebPageSize;
 };
 
 void AwesomiumTestAppApp::setup()
 {
+	mPageNum = -1;
+	mWebPageSize = Vec2i( 1024, 768 );
+	mWebPageRect.set( 0, 0, mWebPageSize.x, mWebPageSize.y );
+
 	initAwesomium();
 	loadWebPage( "http://www.google.com" );
-
-	mPageNum = -1;
-	webPageRect.set( 0, 0, 1024, 768 );
-
 }
 
 void AwesomiumTestAppApp::keyDown( KeyEvent event )
 {
-	
-
 	mPageNum++;
 	console() << "loading page number: " << mPageNum << std::endl;
 	switch ( mPageNum ){
-	case 0: loadWebPage("http://www.homestarrunner.com/sbemail132.html"); break;
-	//case 0: loadWebPage("http://www.yahoo.com");					break;
-	case 1: loadWebPage("https://lh6.googleusercontent.com/-yuv2MXiyTP4/TydzbXisj1I/AAAAAAAAR3I/tYV0zhL6lRQ/s991/Faux+Seals.jpg");	break;
-	case 2: loadWebPage("http://www.msn.com");						break;
-	case 3: loadWebPage("http://www.libcinder.org");				break;
-	case 4: loadWebPage("http://forum.libcinder.org");  break;
-	case 5: loadWebPage( "http://supertouch-05.interference.local/dev/supertouch/demos/widgets/"); mPageNum = -1; break;
-
+		case 0: loadWebPage("http://www.homestarrunner.com/sbemail132.html"); break;
+		//case 0: loadWebPage("http://www.yahoo.com");					break;
+		case 1: loadWebPage("https://lh6.googleusercontent.com/-yuv2MXiyTP4/TydzbXisj1I/AAAAAAAAR3I/tYV0zhL6lRQ/s991/Faux+Seals.jpg");	break;
+		case 2: loadWebPage("http://www.msn.com");						break;
+		case 3: loadWebPage("http://www.libcinder.org");				break;
+		case 4: loadWebPage("http://forum.libcinder.org");  break;
+		case 5: loadWebPage( "http://www.google.com"); mPageNum = -1; break;
 	}
 
 }
 
 void AwesomiumTestAppApp::mouseDrag( MouseEvent event )
 {
-	//if ( 
-	//if ( webPageRect.contains( event.getPos() ) ){
-		webPageRect.set( event.getPos().x, event.getPos().y, event.getPos().x + 1024, event.getPos().y + 768 );
-
-	//}
-
-
+	mWebPageRect.set( event.getPos().x, event.getPos().y, event.getPos().x + mWebPageSize.x, event.getPos().y + mWebPageSize.y );
 }
 
 void AwesomiumTestAppApp::update()
 {
+	updateWebPage();
 }
 
 void AwesomiumTestAppApp::draw()
@@ -86,29 +78,14 @@ void AwesomiumTestAppApp::draw()
 	// clear out the window with black
 	gl::clear( Color( 0, 0, 0 ) ); 
 
-	if(renderBuffer)
+	if(mRenderBuffer)
 	{
-		// Draw pixels directly to screen from our image buffer
-		
-		/*glDrawPixels(1024, 
-					 768, 
-					 GL_BGRA, 
-					 GL_UNSIGNED_BYTE, 
-					 awe_renderbuffer_get_buffer(renderBuffer) );  */
+		uint8_t *data = (uint8_t *) awe_renderbuffer_get_buffer(mRenderBuffer);
 
-		uint8_t *mData = (uint8_t *) awe_renderbuffer_get_buffer(renderBuffer);
-
-		Surface renderedSurface = Surface(mData, 1024, 768, 3, SurfaceChannelOrder::BGRA );
+		Surface renderedSurface = Surface(data, mWebPageSize.x, mWebPageSize.y, 3, SurfaceChannelOrder::BGRA );
 		Texture texture = Texture( renderedSurface );
-		gl::draw(texture, webPageRect);
+		gl::draw(texture, mWebPageRect);
 
-
-		//glRasterPos2i(0, 0);
-		//glPixelZoom(1.0, -1.0);
-		//awe_renderbuffer_get_buffer(renderBuffer);
-
-		// glDrawPixels(getWindowWidth(), getWindowHeight(), GL_RGB, GL_UNSIGNED_BYTE, awe_renderbuffer_get_buffer(renderBuffer) );  
-		
 	}
 }
 
@@ -121,7 +98,7 @@ void AwesomiumTestAppApp::loadWebPage( const string & url )
 		strlen(url.c_str() ) );
 
 	// Load the URL into our WebView instance
-	awe_webview_load_url(webView,
+	awe_webview_load_url(mWebView,
 		url_str,
 		awe_string_empty(),
 		awe_string_empty(),
@@ -131,12 +108,14 @@ void AwesomiumTestAppApp::loadWebPage( const string & url )
 	awe_string_destroy(url_str);
 
 	// Wait for WebView to finish loading the page
-	while(awe_webview_is_loading_page(webView))
+	while(awe_webview_is_loading_page(mWebView))
 		awe_webcore_update();
 
-	renderBuffer = awe_webview_render( webView );
+	mRenderBuffer = awe_webview_render( mWebView );
 	
 }
+
+
 
 void AwesomiumTestAppApp::initAwesomium()
 {
@@ -166,11 +145,18 @@ void AwesomiumTestAppApp::initAwesomium()
 						   false, 
 						   awe_string_empty() );
 
-
-
 	// Create a new WebView to load our page
-	webView = awe_webcore_create_webview(1024, 768,	false);
+	mWebView = awe_webcore_create_webview(mWebPageSize.x, mWebPageSize.y,	false);
 }
+
+void AwesomiumTestAppApp::updateWebPage()
+{
+		awe_webcore_update();
+
+	if ( mRenderBuffer )
+		mRenderBuffer = awe_webview_render( mWebView );
+}
+
 
 
 
