@@ -1,5 +1,7 @@
+#pragma once
 #include "cinder/app/AppBasic.h"
 #include "cinder/gl/gl.h"
+#include "AwesomiumManager.h"
 
 using namespace ci;
 using namespace ci::app;
