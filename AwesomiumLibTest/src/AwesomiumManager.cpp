@@ -4,6 +4,7 @@ AwesomiumManager::AwesomiumManager()
 {
 	mWebViews.clear();
 	mNumWebViews = -1;
+	awe_webcore_initialize_default();
 }
 
 AwesomiumManager::AwesomiumManager( int _numWebViews )
@@ -11,8 +12,6 @@ AwesomiumManager::AwesomiumManager( int _numWebViews )
 	mNumWebViews = _numWebViews;
 	awe_webcore_initialize_default();
 }
-
-
 
 AwesomiumManager::AwesomiumManager( int _numWebViews,
 									bool _enablePlugins, 
@@ -80,8 +79,6 @@ AwesomiumManager::AwesomiumManager( int _numWebViews,
 	awe_string* _customCSS_awe = awe_string_create_from_ascii(_customCSS.c_str(),
 		strlen(_customCSS.c_str() ) );
 
-
-
 	awe_webcore_initialize(
 		_enablePlugins, 
 		_enableJavascript, 
@@ -107,19 +104,40 @@ AwesomiumManager::AwesomiumManager( int _numWebViews,
 		_disableWinMessagePump, 
 		_customCSS_awe 
 	);
+
+	awe_string_destroy( _localePath_awe );
+	awe_string_destroy( _userDataPath_awe );
+	awe_string_destroy( _pluginPath_awe );
+	awe_string_destroy( _package_path_awe );
+	awe_string_destroy( _logPath_awe );
+	awe_string_destroy( _childProcessPath_awe );
+	awe_string_destroy( _acceptLanguageOverride_awe );
+	awe_string_destroy( _defaultCharsetOverride_awe );
+	awe_string_destroy( _userAgentOverride_awe );
+	awe_string_destroy( _proxyServer_awe );
+	awe_string_destroy( _proxyConfigScript_awe );
+	awe_string_destroy( _authServerWhitelist_awe );
+	awe_string_destroy( _customCSS_awe );
 }
 
-int AwesomiumManager::numberOfViews()
+int AwesomiumManager::getNumberOfWebViews()
 {
 	return mNumWebViews;
 }
 
 int AwesomiumManager::addWebView( awe_webview* &_webView )
 {
-
+	mNumWebViews++;
+	return mNumWebViews;
 }
 
-awe_webview* AwesomiumManager::getItem( int index )
+int AwesomiumManager::addWebView( )
+{
+	mNumWebViews++;
+	return mNumWebViews;
+}
+
+AwesomiumWebView AwesomiumManager::getItem( int index )
 {
 
 }

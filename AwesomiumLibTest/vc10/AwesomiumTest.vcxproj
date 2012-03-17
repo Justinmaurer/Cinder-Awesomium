@@ -108,12 +108,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\Awesomium.cpp" />
+    <ClCompile Include="..\src\AwesomiumWebView.cpp" />
     <ClCompile Include="..\src\AwesomiumManager.cpp" />
     <ClCompile Include="..\src\AwesomiumTestApp.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\include\Awesomium.h" />
+    <ClInclude Include="..\include\AwesomiumWebView.h" />
     <ClInclude Include="..\include\AwesomiumManager.h" />
     <ClInclude Include="..\include\Resources.h" />
   </ItemGroup>

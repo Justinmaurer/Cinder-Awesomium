@@ -21,7 +21,7 @@
     <ClCompile Include="..\src\AwesomiumManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Awesomium.cpp">
+    <ClCompile Include="..\src\AwesomiumWebView.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -32,7 +32,7 @@
     <ClInclude Include="..\include\AwesomiumManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\Awesomium.h">
+    <ClInclude Include="..\include\AwesomiumWebView.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

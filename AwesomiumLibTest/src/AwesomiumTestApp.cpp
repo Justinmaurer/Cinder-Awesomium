@@ -25,6 +25,7 @@ class AwesomiumTestAppApp : public AppBasic {
 	void mouseUp( MouseEvent event );
 	//void mouseMove( MouseEvent event );
 	void keyDown(  KeyEvent event );
+	void injectChar( KeyEvent event );
 	void update();
 	void draw();
 	void initAwesomium();
@@ -33,6 +34,8 @@ class AwesomiumTestAppApp : public AppBasic {
 	void loadWebPage2( const string & url );
 	void updateWebPage();
 	void updateWebPage2();
+	void mouseDown( MouseEvent event );
+	void mouseMove( MouseEvent event );
 
 	bool mPage1OnTop;
 
@@ -68,7 +71,7 @@ void AwesomiumTestAppApp::setup()
 {
 	mPageNum = -1;
 	mPageNum2 = 6;
-	mWebPageSize = Vec2i( 1024, 768 );
+	mWebPageSize = Vec2i( 800, 600 );
 	mWebPageSize2 = Vec2i( 1025, 768 );
 	mWebPageRect.set( 0, 0, mWebPageSize.x, mWebPageSize.y );
 	mWebPageRect2.set( 1025, 0, mWebPageSize2.x + 1024, mWebPageSize2.y );
@@ -76,8 +79,11 @@ void AwesomiumTestAppApp::setup()
 	mDragging = false;
 
 	initAwesomium();
-	loadWebPage( "http://www.google.com" );
-
+	loadWebPage("http://www.pinterest.com/");
+	//loadWebPage( "http://flashlight-vnc.sourceforge.net/demo.html" );
+	//loadWebPage("http://www.adobe.com/devnet/actionscript/samples/drawing_5.html");
+	//loadWebPage("http://www.google.com");
+	//loadWebPage("http://www.macromedia.com/support/documentation/en/flashplayer/help/settings_manager08.html");
 
 	initAwesomium2();
 	loadWebPage2( "http://www.yahoo.com" );
@@ -86,13 +92,74 @@ void AwesomiumTestAppApp::setup()
 	mWebPage2Dragged = false;
 }
 
+void AwesomiumTestAppApp::injectChar( KeyEvent event ) 
+{
+	console() << "inject key " << std::endl;
+	
+	// Key Down
+	awe_webkeyboardevent p;
+	p.is_system_key = false;
+//	p.modifiers = modifiers;
+
+	p.text[0] = event.getChar();
+	p.text[1] = 0;
+	p.text[2] = 0;
+	p.text[3] = 0;
+	p.unmodified_text[0] = event.getChar();
+	p.unmodified_text[1] = 0;
+	p.unmodified_text[2] = 0;
+	p.unmodified_text[3] = 0;
+	p.virtual_key_code = event.getChar();
+	p.native_key_code = event.getChar();
+	p.type = AWE_WKT_KEYDOWN;
+	awe_webview_inject_keyboard_event(mWebView, p);
+
+	// Key Char
+	awe_webkeyboardevent e;
+	e.is_system_key = false;
+//	e.modifiers = modifiers;
+	e.text[0] = event.getChar();
+	e.text[1] = 0;
+	e.text[2] = 0;
+	e.text[3] = 0;
+	e.unmodified_text[0] = 0;
+	e.unmodified_text[1] = 0;
+	e.unmodified_text[2] = 0;
+	e.unmodified_text[3] = 0;
+	e.virtual_key_code = 0;
+	e.native_key_code = 0;
+	e.type = AWE_WKT_CHAR;
+	awe_webview_inject_keyboard_event(mWebView, e);
+
+	// Key Up
+	awe_webkeyboardevent j;
+	j.is_system_key = false;
+	//j.modifiers = modifiers;
+
+	j.text[0] = event.getChar();
+	j.text[1] = 0;
+	j.text[2] = 0;
+	j.text[3] = 0;
+	j.unmodified_text[0] = event.getChar();
+	j.unmodified_text[1] = 0;
+	j.unmodified_text[2] = 0;
+	j.unmodified_text[3] = 0;
+	j.virtual_key_code = event.getChar();
+	j.native_key_code = event.getChar();
+	j.type = AWE_WKT_KEYUP;
+	awe_webview_inject_keyboard_event(mWebView, j);
+	awe_webcore_update();
+}
+
 void AwesomiumTestAppApp::keyDown( KeyEvent event )
 {
-	mPageNum++;
+
+	injectChar( event );
+	/*mPageNum++;
 	mPageNum2--;
 
 	console() << "loading page number: " << mPageNum << ", " << mPageNum2 << std::endl;
-
+	
 	switch ( mPageNum ){
 		case 0: loadWebPage("http://www.homestarrunner.com/sbemail132.html"); break;
 		case 1: loadWebPage("https://lh6.googleusercontent.com/-yuv2MXiyTP4/TydzbXisj1I/AAAAAAAAR3I/tYV0zhL6lRQ/s991/Faux+Seals.jpg");	break;
@@ -109,24 +176,31 @@ void AwesomiumTestAppApp::keyDown( KeyEvent event )
 		case 3: loadWebPage2("http://www.libcinder.org");				break;
 		case 4: loadWebPage2("http://forum.libcinder.org");  break;
 		case 5: loadWebPage2( "http://www.homestarrunner.com/sbemail132.html"); break;
-	}
+	}*/
+
+
 
 }
 
 void AwesomiumTestAppApp::mouseUp( MouseEvent event )
 {
 	mDragging = false;
+
+	console() << "mouse up" << std::endl;
+	awe_webview_inject_mouse_up(mWebView, AWE_MB_LEFT );
 }
 
 void AwesomiumTestAppApp::mouseDrag( MouseEvent event )
 {
 
-	if ( mWebPageRect2.contains( event.getPos() ) ){ 
+/*	if ( mWebPageRect2.contains( event.getPos() ) ){ 
 			mWebPageRect2.set( event.getPos().x - mWebPageSize2.x/2, event.getPos().y - mWebPageSize2.y/2, event.getPos().x + mWebPageSize2.x/2, event.getPos().y + mWebPageSize2.y/2 );
 			mWebPage2Dragged = true;
 			mWebPage1Dragged = false;
 	}
-	else if ( mWebPageRect.contains( event.getPos() ) ){
+	else*/
+	
+	if ( mWebPageRect.contains( event.getPos() ) ){
 
 			mWebPage1Dragged = true;
 			mWebPage2Dragged = false;
@@ -167,7 +241,7 @@ void AwesomiumTestAppApp::draw()
 	}
 
 
-	if(mRenderBuffer2)
+/*	if(mRenderBuffer2)
 	{
 		uint8_t *data = (uint8_t *) awe_renderbuffer_get_buffer(mRenderBuffer2);
 
@@ -175,7 +249,7 @@ void AwesomiumTestAppApp::draw()
 		Texture texture = Texture( renderedSurface );
 
 		gl::draw(texture, mWebPageRect2);
-	}
+	}*/
 }
 
 void AwesomiumTestAppApp::loadWebPage( const string & url )
@@ -281,6 +355,18 @@ void AwesomiumTestAppApp::updateWebPage2()
 
 	if ( mRenderBuffer2 )
 		mRenderBuffer2 = awe_webview_render( mWebView2 );
+}
+
+void AwesomiumTestAppApp::mouseDown( MouseEvent event )
+{
+	console() << "mouse down" << std::endl;
+	awe_webview_inject_mouse_down(mWebView, AWE_MB_LEFT);
+}
+
+void AwesomiumTestAppApp::mouseMove( MouseEvent event )
+{
+	console() << "mouse move" << std::endl;
+	awe_webview_inject_mouse_move (mWebView, event.getPos().x - mWebPageRect.x1, event.getPos().y - mWebPageRect.y1);
 }
 
 

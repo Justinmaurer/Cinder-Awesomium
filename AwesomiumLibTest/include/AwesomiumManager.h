@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Awesomium.h"
+#include "AwesomiumWebView.h"
 #include <vector>
 
 using namespace std;
@@ -42,9 +42,11 @@ class AwesomiumManager {
 			mWebViews.clear();
 		}
 
-		int				numberOfViews();
-		int				addWebView( awe_webview* &_webView );
-		awe_webview*	getItem( int index );
+
+		int					getNumberOfWebViews();
+		int					addWebView( awe_webview* &_webView );
+		int					addWebView( );
+		AwesomiumWebView	getItem( int index );
 		
 	private:
 		int mNumWebViews;
