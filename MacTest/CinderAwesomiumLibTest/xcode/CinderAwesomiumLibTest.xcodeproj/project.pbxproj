@@ -18,7 +18,10 @@
 		5323E6B20EAFCA74003A9687 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5323E6B10EAFCA74003A9687 /* CoreVideo.framework */; };
 		5323E6B60EAFCA7E003A9687 /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5323E6B50EAFCA7E003A9687 /* QTKit.framework */; };
 		53E3CDFC0E86099300238D2B /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53E3CDFB0E86099300238D2B /* Carbon.framework */; };
+		7D5E23BC1529DC6C00991822 /* AwesomiumState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7D5E23BB1529DC6C00991822 /* AwesomiumState.cpp */; };
 		7DB9552F1528B44F00BC3868 /* Awesomium.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DB9552E1528B44F00BC3868 /* Awesomium.framework */; };
+		7DB955341528C13C00BC3868 /* AwesomiumManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7DB955321528C13C00BC3868 /* AwesomiumManager.cpp */; };
+		7DB955351528C13C00BC3868 /* AwesomiumWebView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7DB955331528C13C00BC3868 /* AwesomiumWebView.cpp */; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 /* End PBXBuildFile section */
 
@@ -35,11 +38,17 @@
 		13E42FB307B3F0F600E4EEF1 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
-		32CA4F630368D1EE00C91783 /* CinderAwesomiumLibTest_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CinderAwesomiumLibTest_Prefix.pch; sourceTree = "<group>"; };
 		5323E6B10EAFCA74003A9687 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = /System/Library/Frameworks/CoreVideo.framework; sourceTree = "<absolute>"; };
 		5323E6B50EAFCA7E003A9687 /* QTKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QTKit.framework; path = /System/Library/Frameworks/QTKit.framework; sourceTree = "<absolute>"; };
 		53E3CDFB0E86099300238D2B /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
+		7D5E23BB1529DC6C00991822 /* AwesomiumState.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AwesomiumState.cpp; sourceTree = "<group>"; };
+		7DB3443B1528E6790011B44D /* CinderAwesomiumLibTest_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CinderAwesomiumLibTest_Prefix.pch; sourceTree = "<group>"; };
+		7DB3443E15291B820011B44D /* AwesomiumState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AwesomiumState.h; sourceTree = "<group>"; };
 		7DB9552E1528B44F00BC3868 /* Awesomium.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Awesomium.framework; sourceTree = "<group>"; };
+		7DB955301528C13000BC3868 /* AwesomiumManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AwesomiumManager.h; sourceTree = "<group>"; };
+		7DB955311528C13000BC3868 /* AwesomiumWebView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AwesomiumWebView.h; sourceTree = "<group>"; };
+		7DB955321528C13C00BC3868 /* AwesomiumManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AwesomiumManager.cpp; sourceTree = "<group>"; };
+		7DB955331528C13C00BC3868 /* AwesomiumWebView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AwesomiumWebView.cpp; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* CinderAwesomiumLibTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CinderAwesomiumLibTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -69,7 +78,10 @@
 		080E96DDFE201D6D7F000001 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				7DB955321528C13C00BC3868 /* AwesomiumManager.cpp */,
+				7DB955331528C13C00BC3868 /* AwesomiumWebView.cpp */,
 				00BAE6590E7ED9C10018A608 /* CinderAwesomiumLibTestApp.cpp */,
+				7D5E23BB1529DC6C00991822 /* AwesomiumState.cpp */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -125,7 +137,10 @@
 		29B97315FDCFA39411CA2CEA /* Headers */ = {
 			isa = PBXGroup;
 			children = (
-				32CA4F630368D1EE00C91783 /* CinderAwesomiumLibTest_Prefix.pch */,
+				7DB3443E15291B820011B44D /* AwesomiumState.h */,
+				7DB955301528C13000BC3868 /* AwesomiumManager.h */,
+				7DB955311528C13000BC3868 /* AwesomiumWebView.h */,
+				7DB3443B1528E6790011B44D /* CinderAwesomiumLibTest_Prefix.pch */,
 			);
 			name = Headers;
 			sourceTree = "<group>";
@@ -210,6 +225,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				00BAE65A0E7ED9C10018A608 /* CinderAwesomiumLibTestApp.cpp in Sources */,
+				7DB955341528C13C00BC3868 /* AwesomiumManager.cpp in Sources */,
+				7DB955351528C13C00BC3868 /* AwesomiumWebView.cpp in Sources */,
+				7D5E23BC1529DC6C00991822 /* AwesomiumState.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
