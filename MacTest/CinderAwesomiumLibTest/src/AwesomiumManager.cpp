@@ -2,19 +2,12 @@
 
 AwesomiumManager::AwesomiumManager()
 {
-	mWebViews.clear();
-	mNumWebViews = -1;
 	awe_webcore_initialize_default();
+
 }
 
-AwesomiumManager::AwesomiumManager( int _numWebViews )
-{
-	mNumWebViews = _numWebViews;
-	awe_webcore_initialize_default();
-}
 
-AwesomiumManager::AwesomiumManager( int _numWebViews,
-									bool _enablePlugins, 
+AwesomiumManager::AwesomiumManager(	bool _enablePlugins, 
 									bool _enableJavascript, 
 									bool _enableDatabases, 
 									const string & _packagePath, 
@@ -38,7 +31,6 @@ AwesomiumManager::AwesomiumManager( int _numWebViews,
 									bool _disableWinMessagePump, 
 									const string & _customCSS )
 {
-	mNumWebViews = _numWebViews;
 
 	awe_string* _localePath_awe = awe_string_create_from_ascii(_localePath.c_str(),
 		strlen(_localePath.c_str() ) );
@@ -118,26 +110,4 @@ AwesomiumManager::AwesomiumManager( int _numWebViews,
 	awe_string_destroy( _proxyConfigScript_awe );
 	awe_string_destroy( _authServerWhitelist_awe );
 	awe_string_destroy( _customCSS_awe );
-}
-
-int AwesomiumManager::getNumberOfWebViews()
-{
-	return mNumWebViews;
-}
-
-int AwesomiumManager::addWebView( awe_webview* &_webView )
-{
-	mNumWebViews++;
-	return mNumWebViews;
-}
-
-int AwesomiumManager::addWebView( )
-{
-	mNumWebViews++;
-	return mNumWebViews;
-}
-
-AwesomiumWebView AwesomiumManager::getItem( int index )
-{
-
 }

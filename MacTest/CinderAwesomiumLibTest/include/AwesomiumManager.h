@@ -1,6 +1,10 @@
 #pragma once
-
-#include "AwesomiumWebView.h"
+#include <string>
+#include "cinder/Vector.h"
+#include "cinder/Rect.h"
+#include "cinder/Surface.h"
+#include "cinder/gl/Texture.h"
+#include <Awesomium/awesomium_capi.h>
 #include <vector>
 
 using namespace std;
@@ -8,12 +12,9 @@ using namespace std;
 class AwesomiumManager {
 
 	public:
-		//const string test;
 
 		AwesomiumManager();
-		AwesomiumManager( int _numWebViews );
-		AwesomiumManager( int _numWebViews, 
-						  bool _enablePlugins,
+		AwesomiumManager( bool _enablePlugins,
 						  bool _enableJavascript,
 						  bool _enableDatabases,
 						  const string & _packagePath,
@@ -39,16 +40,9 @@ class AwesomiumManager {
 
 	
 		~AwesomiumManager(){
-			mWebViews.clear();
+
 		}
+        
+        
 
-
-		int					getNumberOfWebViews();
-		int					addWebView( awe_webview* &_webView );
-		int					addWebView( );
-		AwesomiumWebView	getItem( int index );
-		
-	private:
-		int mNumWebViews;
-		std::vector<awe_webview*> mWebViews;
 };
