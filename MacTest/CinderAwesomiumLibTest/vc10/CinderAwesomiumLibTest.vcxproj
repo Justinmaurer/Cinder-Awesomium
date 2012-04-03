@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -43,6 +43,10 @@
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)$(Configuration)\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(Configuration)\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">c:\dev\frameworks\cinder\current\cinder_master\include;c:\dev\frameworks\cinder\current\cinder_master\boost;$(IncludePath);C:\Program Files (x86)\Khrona LLC\Awesomium SDK\1.6.4\include</IncludePath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">c:\dev\frameworks\cinder\current\cinder_master\include;$(IncludePath);C:\Program Files (x86)\Khrona LLC\Awesomium SDK\1.6.4\include;c:\dev\frameworks\cinder\boost\</IncludePath>
+    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\Program Files %28x86%29\Khrona LLC\Awesomium SDK\1.6.4\build\lib\debug;c:\dev\frameworks\cinder\current\cinder_master\lib;c:\dev\frameworks\cinder\current\cinder_master\lib\msw;C:\Program Files (x86)\Khrona LLC\Awesomium SDK\1.6.4\build\bin\debug;$(LibraryPath)</LibraryPath>
+    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\Program Files %28x86%29\Khrona LLC\Awesomium SDK\1.6.4\build\lib\release;c:\dev\frameworks\cinder\current\cinder_master\lib;c:\dev\frameworks\cinder\current\cinder_master\lib\msw;C:\Program Files (x86)\Khrona LLC\Awesomium SDK\1.6.4\build\bin\release;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -61,7 +65,7 @@
       <AdditionalIncludeDirectories>..\..\..\..\..\frameworks\cinder\cinder_master\include;..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>cinder_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Awesomium_d.lib;cinder_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\..\..\..\..\frameworks\cinder\cinder_master\lib;..\..\..\..\..\frameworks\cinder\cinder_master\lib\msw;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
@@ -89,7 +93,7 @@
       <AdditionalIncludeDirectories>..\..\..\..\..\frameworks\cinder\cinder_master\include;..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>cinder.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Awesomium.lib;cinder.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\..\..\..\..\frameworks\cinder\cinder_master\lib;..\..\..\..\..\frameworks\cinder\cinder_master\lib\msw;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <GenerateMapFile>true</GenerateMapFile>
@@ -104,14 +108,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\src\AwesomiumManager.cpp" />
+    <ClCompile Include="..\src\AwesomiumState.cpp" />
+    <ClCompile Include="..\src\AwesomiumWebView.cpp" />
     <ClCompile Include="..\src\CinderAwesomiumLibTestApp.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\include\AwesomiumManager.h" />
+    <ClInclude Include="..\include\AwesomiumState.h" />
+    <ClInclude Include="..\include\AwesomiumWebView.h" />
     <ClInclude Include="..\include\Resources.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resources.rc" />
-  </ItemGroup>  
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
