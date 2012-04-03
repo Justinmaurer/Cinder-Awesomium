@@ -23,7 +23,55 @@ class CinderAwesomiumLibTestApp : public AppBasic {
 
 void CinderAwesomiumLibTestApp::setup()
 {
-    mAwesomiumManager = AwesomiumManager( );
+   // mAwesomiumManager = AwesomiumManager( );
+	/*true, 
+		true, 
+		true, 
+		awe_string_empty(), 
+		awe_string_empty(), 
+		awe_string_empty(), 
+		awe_string_empty(), 
+		awe_string_empty(), 
+		AWE_LL_NORMAL,
+		false, 
+		awe_string_empty(), 
+		awe_string_empty(), 
+		awe_string_empty(), 
+		awe_string_empty(), 
+		awe_string_empty(), 
+		awe_string_empty(), 
+		awe_string_empty(),
+		awe_string_empty(), 
+		true, 
+		6000, 
+		false, 
+		false, 
+		awe_string_empty() */
+
+	mAwesomiumManager = AwesomiumManager(true,
+										true,
+										true,
+										"",
+										"",
+										"",
+										"",
+										"",
+										AWE_LL_NORMAL,
+										false,
+										"",
+										"",
+										"",
+										"",
+										"",
+										"",
+										"",
+										"",
+										true,
+										6000,
+										false,
+										false,
+										"");
+
     myWebView = AwesomiumWebView();
     
 }
