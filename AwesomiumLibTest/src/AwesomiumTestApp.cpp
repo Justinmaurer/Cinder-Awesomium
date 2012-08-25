@@ -2,6 +2,9 @@
 #include "cinder/gl/gl.h"
 #include "cinder/Rand.h"
 #include "cinder/gl/Texture.h"
+#include "cinder/Utilities.h"
+#include "boost/lexical_cast.hpp"
+
 
 #include "AwesomiumManager.h"
 
@@ -20,6 +23,7 @@ using namespace std;
 
 class AwesomiumTestAppApp : public AppBasic {
   public:
+	void prepareSettings( Settings *settings );
 	void setup();
 	void mouseDrag( MouseEvent event );
 	void mouseUp( MouseEvent event );
@@ -29,11 +33,8 @@ class AwesomiumTestAppApp : public AppBasic {
 	void update();
 	void draw();
 	void initAwesomium();
-	void initAwesomium2();
 	void loadWebPage( const string & url );
-	void loadWebPage2( const string & url );
 	void updateWebPage();
-	void updateWebPage2();
 	void mouseDown( MouseEvent event );
 	void mouseMove( MouseEvent event );
 
@@ -43,16 +44,12 @@ class AwesomiumTestAppApp : public AppBasic {
 	int mPageNum2;
 
 	const awe_renderbuffer *mRenderBuffer;
-	const awe_renderbuffer *mRenderBuffer2;
 
 	awe_webview* mWebView;
-	awe_webview* mWebView2;
 
 	Rectf mWebPageRect;
-	Rectf mWebPageRect2;
 
 	Vec2i mWebPageSize;
-	Vec2i mWebPageSize2;
 
 	bool mDragging;
 	float percentageX;
@@ -64,32 +61,25 @@ class AwesomiumTestAppApp : public AppBasic {
 	float Dy2py;
 
 	bool mWebPage1Dragged;
-	bool mWebPage2Dragged;
+
+	Font mDebuggingFont;
 };
 
 void AwesomiumTestAppApp::setup()
 {
-	mPageNum = -1;
-	mPageNum2 = 6;
+	mDebuggingFont = Font( "Arial", 30.0f );
+
+
 	mWebPageSize = Vec2i( 800, 600 );
-	mWebPageSize2 = Vec2i( 1025, 768 );
 	mWebPageRect.set( 0, 0, mWebPageSize.x, mWebPageSize.y );
-	mWebPageRect2.set( 1025, 0, mWebPageSize2.x + 1024, mWebPageSize2.y );
 
 	mDragging = false;
 
 	initAwesomium();
-	loadWebPage("http://www.pinterest.com/");
-	//loadWebPage( "http://flashlight-vnc.sourceforge.net/demo.html" );
-	//loadWebPage("http://www.adobe.com/devnet/actionscript/samples/drawing_5.html");
-	//loadWebPage("http://www.google.com");
-	//loadWebPage("http://www.macromedia.com/support/documentation/en/flashplayer/help/settings_manager08.html");
-
-	initAwesomium2();
-	loadWebPage2( "http://www.yahoo.com" );
+	loadWebPage("http://www.youtube.com");
 
 	mWebPage1Dragged = false;
-	mWebPage2Dragged = false;
+	gl::disableVerticalSync();
 }
 
 void AwesomiumTestAppApp::injectChar( KeyEvent event ) 
@@ -155,31 +145,6 @@ void AwesomiumTestAppApp::keyDown( KeyEvent event )
 {
 
 	injectChar( event );
-	/*mPageNum++;
-	mPageNum2--;
-
-	console() << "loading page number: " << mPageNum << ", " << mPageNum2 << std::endl;
-	
-	switch ( mPageNum ){
-		case 0: loadWebPage("http://www.homestarrunner.com/sbemail132.html"); break;
-		case 1: loadWebPage("https://lh6.googleusercontent.com/-yuv2MXiyTP4/TydzbXisj1I/AAAAAAAAR3I/tYV0zhL6lRQ/s991/Faux+Seals.jpg");	break;
-		case 2: loadWebPage("http://www.msn.com");						break;
-		case 3: loadWebPage("http://www.libcinder.org");				break;
-		case 4: loadWebPage("http://forum.libcinder.org");  break;
-		case 5: loadWebPage( "http://www.google.com"); mPageNum = -1; break;
-	}
-
-	switch ( mPageNum2 ){
-    	case 0: loadWebPage2("http://www.youtube.com/watch?v=kfVsfOSbJY0");  mPageNum2 = 6; break;
-		case 1: loadWebPage2("https://lh6.googleusercontent.com/-yuv2MXiyTP4/TydzbXisj1I/AAAAAAAAR3I/tYV0zhL6lRQ/s991/Faux+Seals.jpg");	break;
-		case 2: loadWebPage2("http://www.msn.com");						break;
-		case 3: loadWebPage2("http://www.libcinder.org");				break;
-		case 4: loadWebPage2("http://forum.libcinder.org");  break;
-		case 5: loadWebPage2( "http://www.homestarrunner.com/sbemail132.html"); break;
-	}*/
-
-
-
 }
 
 void AwesomiumTestAppApp::mouseUp( MouseEvent event )
@@ -203,7 +168,6 @@ void AwesomiumTestAppApp::mouseDrag( MouseEvent event )
 	if ( mWebPageRect.contains( event.getPos() ) ){
 
 			mWebPage1Dragged = true;
-			mWebPage2Dragged = false;
 
 			if ( !mDragging ){
 				Dx1px = event.getPos().x - mWebPageRect.x1;
@@ -221,7 +185,6 @@ void AwesomiumTestAppApp::mouseDrag( MouseEvent event )
 void AwesomiumTestAppApp::update()
 {
 	updateWebPage();
-	updateWebPage2();
 }
 
 void AwesomiumTestAppApp::draw()
@@ -239,17 +202,13 @@ void AwesomiumTestAppApp::draw()
 			gl::draw(texture, mWebPageRect);
 
 	}
-
-
-/*	if(mRenderBuffer2)
-	{
-		uint8_t *data = (uint8_t *) awe_renderbuffer_get_buffer(mRenderBuffer2);
-
-		Surface renderedSurface = Surface(data, mWebPageSize2.x, mWebPageSize2.y, 3, SurfaceChannelOrder::BGRA );
-		Texture texture = Texture( renderedSurface );
-
-		gl::draw(texture, mWebPageRect2);
-	}*/
+	
+	string _fps = boost::lexical_cast<string,float>( getAverageFps() );
+	gl::drawString( "FPS: " + _fps,
+					Vec2f( 0.0f, 0.0f ), 
+					Color::white(),
+					mDebuggingFont );
+	
 }
 
 void AwesomiumTestAppApp::loadWebPage( const string & url )
@@ -275,31 +234,6 @@ void AwesomiumTestAppApp::loadWebPage( const string & url )
 
 	mRenderBuffer = awe_webview_render( mWebView );
 	
-}
-
-
-void AwesomiumTestAppApp::loadWebPage2( const string & url )
-{
-	// Create our URL string
-	awe_string* url_str = awe_string_create_from_ascii(url.c_str(),
-		strlen(url.c_str() ) );
-
-	// Load the URL into our WebView instance
-	awe_webview_load_url(mWebView2,
-		url_str,
-		awe_string_empty(),
-		awe_string_empty(),
-		awe_string_empty());
-
-	// Destroy our URL string
-	awe_string_destroy(url_str);
-
-	// Wait for WebView to finish loading the page
-	while(awe_webview_is_loading_page(mWebView2))
-		awe_webcore_update();
-
-	mRenderBuffer2 = awe_webview_render( mWebView2 );
-
 }
 
 
@@ -335,11 +269,6 @@ void AwesomiumTestAppApp::initAwesomium()
 	mWebView = awe_webcore_create_webview(mWebPageSize.x, mWebPageSize.y,	false);
 }
 
-void AwesomiumTestAppApp::initAwesomium2()
-{	
-	// Create a new WebView to load our page
-	mWebView2 = awe_webcore_create_webview(mWebPageSize2.x, mWebPageSize2.y,	false);
-}
 
 void AwesomiumTestAppApp::updateWebPage()
 {
@@ -349,13 +278,6 @@ void AwesomiumTestAppApp::updateWebPage()
 		mRenderBuffer = awe_webview_render( mWebView );
 }
 
-void AwesomiumTestAppApp::updateWebPage2()
-{
-	//awe_webcore_update();
-
-	if ( mRenderBuffer2 )
-		mRenderBuffer2 = awe_webview_render( mWebView2 );
-}
 
 void AwesomiumTestAppApp::mouseDown( MouseEvent event )
 {
@@ -367,6 +289,11 @@ void AwesomiumTestAppApp::mouseMove( MouseEvent event )
 {
 	console() << "mouse move" << std::endl;
 	awe_webview_inject_mouse_move (mWebView, event.getPos().x - mWebPageRect.x1, event.getPos().y - mWebPageRect.y1);
+}
+
+void AwesomiumTestAppApp::prepareSettings( Settings *settings )
+{
+	settings->setFrameRate( 400.0f );
 }
 
 
